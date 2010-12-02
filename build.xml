@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="calculator" basedir="." default="build">
+    <property name="builddir" value="./build" />
+    <property name="sourcedir" value="application" />
+    <property name="logsdir" value="${builddir}/logs" />
+
+    <target name="init">
+        <mkdir dir="${builddir}" />
+        <mkdir dir="${logsdir}" />
+        <!--<mkdir dir="${logsdir}/coverage" />-->
+    </target>
+
+    <target name="clean">
+        <echo msg="Clean..." />
+        <delete dir="${builddir}" />
+    </target>
+
+    <target name="build" depends="clean,init,phpcpd,phpunit" />
+
+    <!-- PHP copy/paste analysis -->
+    <target name="phpcpd">
+        <phpcpd>
+            <fileset dir="${sourcedir}" id="filestocpd">
+                <include name="**/*.php"/>
+            </fileset>
+            <formatter type="pmd" outfile="${logsdir}/pmd.xml"/>
+        </phpcpd>
+    </target>
+
+    <!-- PHPUnit tests -->
+    <target name="phpunit">
+        <coverage-setup database="${logsdir}/coverage.db">
+            <fileset dir="${sourcedir}">
+                <include name="**/*.php"/>
+            </fileset>
+        </coverage-setup>
+
+        <phpunit codecoverage="true">
+            <formatter todir="${logsdir}" type="xml" outfile="phpunit.xml" />
+            <batchtest>
+                <fileset dir="tests">
+                    <include name="**/*Test*.php"/>
+                    <exclude name="**/Abstract*.php"/>
+                </fileset>
+            </batchtest>
+        </phpunit>
+    </target>
+</project>
