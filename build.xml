@@ -34,9 +34,9 @@
                 <include name="**/*.php"/>
             </fileset>
         </coverage-setup>
-
-        <phpunit codecoverage="true">
-            <formatter todir="${logsdir}" type="xml" outfile="phpunit.xml" />
+        <phpunit codecoverage="true" haltonfailure="false" haltonerror="false">
+            <formatter type="clover" todir="${logsdir}" outfile="clover.xml"/>
+            <formatter type="xml" todir="${logsdir}" outfile="phpunit.xml" />
             <batchtest>
                 <fileset dir="tests">
                     <include name="**/*Test*.php"/>
