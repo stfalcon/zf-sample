@@ -19,7 +19,7 @@
 
     <!-- PHP copy/paste analysis -->
     <target name="phpcpd">
-        <phpcpd minLines="2" minTokens="20">
+        <phpcpd minLines="2" minTokens="10">
             <fileset dir="${sourcedir}" id="filestocpd">
                 <include name="**/*.php"/>
             </fileset>

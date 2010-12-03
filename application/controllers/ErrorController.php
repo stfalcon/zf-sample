@@ -51,7 +51,7 @@ class ErrorController extends Zend_Controller_Action
         return $log;
     }
 
-    public function getLog()
+    public function getLogger()
     {
         $bootstrap = $this->getInvokeArg('bootstrap');
         if (!$bootstrap->hasResource('Log')) {
