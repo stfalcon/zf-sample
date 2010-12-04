@@ -7,7 +7,6 @@
     <target name="init">
         <mkdir dir="${builddir}" />
         <mkdir dir="${logsdir}" />
-        <!--<mkdir dir="${logsdir}/coverage" />-->
     </target>
 
     <target name="clean">
@@ -29,20 +28,34 @@
 
     <!-- PHPUnit tests -->
     <target name="phpunit">
-        <coverage-setup database="${logsdir}/coverage.db">
+        <mkdir dir="${logsdir}/reports" />
+        <mkdir dir="${logsdir}/reports/coverage" />
+
+        <!-- Generate code coverage DB -->
+        <coverage-setup database="${logsdir}/reports/coverage.db">
             <fileset dir="${sourcedir}">
-                <include name="**/*.php"/>
+                <include name="**/*.php" />
+                <exclude name="*Test.php" />
             </fileset>
         </coverage-setup>
+
+        <!-- Run tests -->
         <phpunit codecoverage="true" haltonfailure="false" haltonerror="false">
-            <formatter type="clover" todir="${logsdir}" outfile="clover.xml"/>
-            <formatter type="xml" todir="${logsdir}" outfile="phpunit.xml" />
+            <!-- Write log to XML file -->
+            <formatter type="xml" todir="${logsdir}/reports" />
             <batchtest>
                 <fileset dir="tests">
-                    <include name="**/*Test*.php"/>
-                    <exclude name="**/Abstract*.php"/>
+                    <include name="**/*Test*.php" />
+                    <exclude name="**/Abstract*.php" />
                 </fileset>
             </batchtest>
         </phpunit>
+
+        <!-- XML report to Clover -->
+        <coverage-report outfile="${logsdir}/reports/coverage.xml">
+            <!-- HTML code coverage report -->
+            <report todir="${logsdir}/reports/coverage" styledir="/var/www/test/phing/etc"/>
+        </coverage-report>
     </target>
+
 </project>
